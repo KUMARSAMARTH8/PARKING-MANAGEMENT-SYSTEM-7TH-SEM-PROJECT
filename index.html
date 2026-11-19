@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parking Management System</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="images.jpg" alt="KIIT logo">
+            </div>
+            <div class="title">
+                <span class="main-title">Parking Management System</span>
+            </div>
+
+        </div>
+    </header>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">OPTIONS</div>
+            <ul class="sidebar-menu">
+
+                <li><button id="nav-entry" class="nav-button">Vehicle Entry</button></li>
+                <li><button id="nav-transport" class="nav-button">Transport Advisor</button></li>
+                <li><button id="nav-report" class="nav-button">Report & Exit</button></li>
+                <li><i class="fas fa-file-excel"></i> <a href="/excel" target="_blank"
+                        style="color: inherit; text-decoration: none;">Export CSV (Excel)</a></li>
+                <li><button id="logout-btn" class="nav-button">Logout</button></li>
+            </ul>
+        </aside>
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <div id="app-message" role="status" aria-live="polite"></div>
+            <section class="availability-panel" aria-labelledby="availability-title">
+                <div class="availability-head"><h2 id="availability-title">Live Parking Availability</h2>
+                    <button type="button" id="avail-btn">Refresh</button></div>
+                <div class="availability-cards" id="availability-cards"></div>
+            </section>
+            <section class="availability-panel" aria-labelledby="prediction-title">
+                <div class="availability-head"><h2 id="prediction-title">Predict Vehicle Slot Availability</h2>
+                    <button type="button" id="predict-btn">Predict Availability</button></div>
+                <p>Upcoming parking space estimates for each vehicle type. Estimates are not reservations.</p>
+                <div class="availability-cards" id="prediction-cards" aria-live="polite">Select Predict Availability to view estimates.</div>
+            </section>
+            <section class="transport-panel" id="transport-panel" aria-labelledby="transport-title">
+                <h2 id="transport-title">Should I use public or private transport?</h2>
+                <p>Enter your trip details. The recommendation is based mainly on the CURRENT available slots for your selected vehicle. Four or more free slots (when capacity is 10) favors private transport; 1–3 favors public transport. No slots means private parking is unavailable.</p>
+                <form id="transport-form">
+                    <div class="transport-grid">
+                        <div><label for="trip-vehicle">Private vehicle type</label><select id="trip-vehicle"><option>Car</option><option>Motorcycle</option><option>Bicycle</option></select></div>
+                        <div><label for="trip-distance">Trip distance (km)</label><input type="number" id="trip-distance" min="0.1" max="300" step="0.1" placeholder="e.g. 10" required></div>
+                        <div><label for="trip-public">Public transport serves this trip?</label><select id="trip-public"><option value="yes">Yes</option><option value="no">No</option></select></div>
+                        <div><label for="trip-walking">Walking distance to public transport (metres)</label><input type="number" id="trip-walking" min="0" max="10000" step="1" placeholder="e.g. 300" required></div>
+                         <div><label for="trip-congestion">Expected traffic congestion</label><select id="trip-congestion"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option></select></div>
+                    </div>
+                    <button type="submit" id="transport-submit" class="btn-submit">Predict & Recommend Transport</button>
+                </form>
+                <div id="transport-error" role="alert"></div>
+                <div id="transport-result" class="transport-result hidden" role="status" aria-live="polite" tabindex="-1"></div>
+            </section>
+            <!-- Data Entry Form -->
+            <div class="form-box" id="data-entry-container">
+                <h1>Daily Parking Management & Data Entry Panel</h1>
+                <form id="data-form">
+                    <label for="vehicle">Select Vehicle:</label>
+                    <div class="btn-group" id="vehicle-group">
+                        <button type="button" class="option-btn" data-value="Bicycle">Bicycle</button>
+                        <button type="button" class="option-btn" data-value="Motorcycle">Motorcycle</button>
+                        <button type="button" class="option-btn" data-value="Car">Car</button>
+                    </div>
+                    <input type="hidden" id="vehicle">
+
+                    <label for="personnel">Select Personnel:</label>
+                    <div class="btn-group" id="personnel-group">
+                        <button type="button" class="option-btn" data-value="Student">Student</button>
+                        <button type="button" class="option-btn" data-value="Faculty">Faculty</button>
+                        <button type="button" class="option-btn" data-value="Staff">Staff</button>
+                    </div>
+                    <input type="hidden" id="personnel">
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="passengers">No. of Passengers</label>
+                            <input type="number" id="passengers" min="1" max="999" step="1" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="vehicleNo">Vehicle no. / Bicycle ID</label>
+                            <input type="text" id="vehicleNo" maxlength="30" required>
+                        </div>
+
+                    </div>
+
+                    <label for="remarks">Remarks</label>
+                    <textarea id="remarks" maxlength="500" placeholder="Enter Any Remarks...." rows="4"></textarea>
+
+                    <div class="form-buttons">
+                        <button type="submit" class="btn-submit">Park Vehicle</button>
+                        <button type="reset" class="btn-reset">Clear</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Report View Container -->
+            <div class="report-container hidden" id="report-container">
+                <div class="report-header">Parking Management System — Report</div>
+                <div class="report-filters">
+                    <div class="filter-group">
+                        <label for="filter-date">Filter by Date:</label>
+                        <input type="date" id="filter-date">
+                    </div>
+                    <div class="filter-group">
+                        <label for="filter-vehicle-no">Filter by Vehicle Number:</label>
+                        <input type="text" id="filter-vehicle-no" placeholder="e.g. OD01AB1234">
+                    </div>
+                    <button id="filter-btn"><i class="fas fa-filter"></i> Filter</button>
+                    <button id="clear-filter-btn"
+                        style="background:#6c757d;color:#fff;border:none;padding:8px 16px;border-radius:5px;cursor:pointer;margin-left:6px;"><i
+                            class="fas fa-times"></i> Clear</button>
+                </div>
+
+                <!-- Summary Bar -->
+                <div id="report-summary"
+                    style="display:none; background:#fff3cd; border:1px solid #ffc107; border-radius:6px; padding:10px 18px; margin-bottom:14px; font-size:15px; display:flex; gap:30px; align-items:center;">
+                    <span>📋 Total Records: <strong id="summary-count">0</strong></span>
+
+                </div>
+
+                <div class="report-table-wrapper">
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Vehicle Type</th>
+                                <th>Personnel</th>
+                                <th>Passengers</th>
+                                <th>Vehicle No.</th>
+                                <th>Status</th>
+                                <th>Remarks</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="report-table-body">
+                            <!-- Data will be inserted here by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="bottom-bar">
+        <marquee behavior="scroll" direction="left">
+            <em>"Thanks for visiting our Daily Parking Management Entry Page ."</em>
+        </marquee>
+    </footer>
+
+    <!-- Welcome Message -->
+    <div class="welcome-bar">Welcome, User</div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <p>Vehicle parked successfully!</p>
+            <button id="close-modal-btn">OK</button>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

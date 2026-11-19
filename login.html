@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <img src="images.jpg" class="logo">
+            <h1>Parking Management System</h1>
+        </div>
+    </header>
+
+    <div class="login-container">
+        <h2>Login</h2>
+        <p id="connection-status" role="status" aria-live="polite"></p>
+        <p>Demo account: <strong>Shubham</strong> / <strong>shuchak</strong></p>
+        <form id="login-form">
+            <label for="username">Username:</label>
+            <input type="text" id="username" autocomplete="username" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" autocomplete="current-password" required>
+
+            <div role="alert" id="error-message" style="color: red; margin-top: 10px;"></div>
+
+            <button type="submit" class="btn-submit">Login</button>
+        <button type="button" id="demo-login">Use demo login</button>
+        </form>
+        <p class="startup-help">Start with <strong>START_WINDOWS.bat</strong>. Open the page launched by it.
+        <a href="http://127.0.0.1:5000">Open default local server</a></p>
+    </div>
+
+    <footer class="footer">
+        <marquee behavior="scroll" direction="left">Welcome to PMS Website !</marquee>
+    </footer>
+
+    <script src="api.js"></script>
+    <script src="login.js"></script>
+</body>
+</html>
